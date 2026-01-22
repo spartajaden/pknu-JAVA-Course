@@ -1,7 +1,7 @@
 // Entry point for the web app
 function doGet() {
   return HtmlService.createHtmlOutputFromFile('index')
-    .setTitle('하이케어봇')
+    .setTitle('간단한 챗봇')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
