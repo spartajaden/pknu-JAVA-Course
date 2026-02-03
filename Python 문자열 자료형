@@ -75,3 +75,10 @@ Alt 누른 채로 마우스로 >>> 부분 드래그
 👉 모든 줄의 >>>가 동시에 삭제됨
 
 (Windows / Linux 기준)
+
+# 응용
+import requests as req
+url = "https://api4.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
+res = req.get(url).text
+btc = res[29:34]
+print(str(int(btc)*1450) + '원') # -> 1억 1383만 0800원
