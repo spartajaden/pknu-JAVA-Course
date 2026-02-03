@@ -115,3 +115,28 @@ print("나는 사과를 %s개 먹었다." % '3')
 
 inp = input("몇개인지 입력하세요.")
 print("나는 사과를 %s개 먹었다." % (str(inp) * 1))
+
+# 문자열
+print("%20s" % '12.34 문자표현' )
+# 정수
+print("%10d" % 12.34 )
+# 부동소수점
+print("%f" % 12.34 )
+# %%표기
+print("한국에 산은 %d%% 정도 있습니다." % 70)
+
+# 소수점 표현하기
+print("%.2fkkkkk" % 3.141592)
+print("%10.2fkkkkk" % 3.141592)
+print("%-10.2fkkkkk" % 3.141592)
+
+# 숫자값을 가진 변수로 대입하기
+s = "five"
+ss = "I can {0} apples".format(s)
+print(ss, type(ss))
+
+# 2개 이상 값 넣기
+s = "five"
+e = 7
+ss = "I eat {0} apples, so I was sic for {1} days.".format(s,e)
+print(ss, type(ss))
