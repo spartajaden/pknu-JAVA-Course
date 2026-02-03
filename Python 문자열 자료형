@@ -105,3 +105,13 @@ res = req.get(url).text
 btc = res[29:34]
 won = str(int(btc)*1450)
 print( won[:1]+ '억' + won[1:5]+ '만' + won[5:]+ '원') #  -> 1억1375만5400원
+
+03. 문자열 포매팅
+# 문자열 포매팅, 대입
+app = 3
+print("나는 사과를 %d개 먹었다." % app)
+
+print("나는 사과를 %s개 먹었다." % '3')
+
+inp = input("몇개인지 입력하세요.")
+print("나는 사과를 %s개 먹었다." % (str(inp) * 1))
