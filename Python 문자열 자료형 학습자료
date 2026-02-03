@@ -140,3 +140,14 @@ s = "five"
 e = 7
 ss = "I eat {0} apples, so I was sic for {1} days.".format(s,e)
 print(ss, type(ss))
+
+# 왼쪽정렬
+print("{0:<10}".format("hi"))
+# 오른쪽정렬
+print("{0:>10}".format("hi"))
+# 가운데 정렬
+print("{0:^10}".format("hi"))
+
+# 응용
+re = "{0:.^18}".format("영수증")
+print("="*20+"\n"+re+"\n"+"="*20)
