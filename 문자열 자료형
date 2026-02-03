@@ -1,0 +1,21 @@
+str1 = "안녕" + '하세요'
+str2 = "안녕하세요 '홍길동' 이라고 합니다"
+str3 = '안녕하세요 "홍길동" 이라고 합니다'
+str4 = """저는
+여러줄을
+작성합니다.
+"""
+str5 = """저는
+여러줄을
+작성합니다.
+"""
+str6 = "저는\n여러줄을\n작성합니다."
+print(str1)
+print(str2)
+print(str3)
+print(str4)
+print(str5)
+print(str6)
+
+✨ 제목 넣는 가장 정확한 방법 (Jupyter 기준)
+ESC → M → # 제목 → Shift + Enter
