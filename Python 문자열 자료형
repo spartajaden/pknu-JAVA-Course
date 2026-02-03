@@ -76,7 +76,29 @@ Alt 누른 채로 마우스로 >>> 부분 드래그
 
 (Windows / Linux 기준)
 
-# 응용
+# 테스트
+import time as t
+dir(t)
+
+# 응용 1
+import requests as req
+url = "https://v.daum.net/v/20260203120206039"
+res = req.get(url).text
+print(res[:600])
+print(res.find("급락"))
+print(res.find("증폭"))
+print(res[374:402])
+
+# 응용 2
+import requests as req
+url = "https://v.daum.net/v/20260203120206039"
+res = req.get(url).text
+print(res[:600])
+print(res.find("급락"))
+print(res.find("증폭"))
+print(res[374:402])
+
+# 응용 3
 import requests as req
 url = "https://api4.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
 res = req.get(url).text
