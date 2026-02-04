@@ -1,2 +1,61 @@
 #리스트 만들기
 odd = [1,3,5,7,9]
+
+#리스트 중요한점, 순서!!! index!!
+a = []
+b = [1, 2, 3]
+c = ['Life', 'is', 'too', 'short']
+d = [1, 2, 'Life', 'is']
+e = [1, 2, ['Life', 'is']]
+
+s = "spring"
+s[0]
+a = [11,22,33,44,55]
+print(a[0] + a[3])
+
+a = 'banana'
+print(id(a))
+b = a
+print(id(b))
+b = 'kiwi'
+print(id(b))
+print(a)
+print(b)
+
+aa = [11, 22, 33]
+print(id(aa))
+bb = aa
+print(id(bb))
+bb = [1, 3, 5]
+print(id(bb))
+print(aa)
+print(bb)
+
+# 배열 초기화
+cc = []
+print(cc, type(cc))
+dd = list()
+print(dd, type(dd))
+
+# 2중배열
+li = [1,2,3,4,5,[11,22,33]]
+print(li)
+
+print(li[0])
+print(li[4])
+print(li[-1])
+print(li[4][1])
+
+a = [1, 2, 3, ['a', 'b', 'c', ['ok', 'life', 'is']]]
+# 'life' !!
+print(a[-1][-1][-2])
+
+# 리스트의 슬라이싱
+a = [11,22,33,44,55]
+print(a[:2])
+print(a[1:2])
+print(a[3:])
+
+# 중첩된 리스트에서 슬라이싱 하기
+a = [1, 2, ['0', '1', 'a', 'b', 'c'], 4, 5]
+# ['a', 'b', 'c']
