@@ -151,3 +151,16 @@ print("{0:^10}".format("hi"))
 # 응용
 re = "{0:.^18}".format("영수증")
 print("="*20+"\n"+re+"\n"+"="*20)
+
+04. f문자열 포메팅
+# f 문자열 포매팅
+name = '홍길동'
+age = 30
+print(f"나의 이름은 {name}입니다. 나이는 {age + 1} 입니다.")
+
+# 위치 알려 주기 1 - find
+a = "Python is the best choice"
+a.find('b')
+14
+a.find('k')
+-1
