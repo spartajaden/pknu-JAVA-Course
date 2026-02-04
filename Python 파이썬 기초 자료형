@@ -1,3 +1,30 @@
+print("a")
+
+# 문자 x 숫자 = 반복
+print("안녕" * 5)
+
+print("=" * 20, end='')
+
+# print 심화2
+print("안녕", "하시", "겠습니까", "?", sep='-')
+print(1,2,3,4,5,sep='/')
+
+# print 응용1
+import time as t
+print("잠온다")
+t.sleep(1.5)
+print("배가불러서일까?")
+t.sleep(1.5)
+print("배가고파서일까?")
+
+# print 응용2
+import time as t 
+print("기대하세요.", end='\r')
+t.sleep(1.5)
+print("드디어~~", end='\r')
+t.sleep(1.5)
+print("개봉합니다!", end='\r')
+
 01 . 문자형 자료형 
 str1 = "안녕" + '하세요'
 str2 = "안녕하세요 '홍길동' 이라고 합니다"
