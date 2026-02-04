@@ -205,3 +205,11 @@ a = "Life is long short"
 a.replace("too short","Egg")
 print(b)
 print(a)
+
+# split - 문자열 나누기 **
+a = "Life is too short"
+print(a.split())
+b = "a:b:c:d:e:f"
+print(b.split(':'))
+c = 'BaNaNa'
+# BaNaNa -> c = b*a*n*a*n*a -> ['b', 'a', 'n', 'a', 'n', 'a']
