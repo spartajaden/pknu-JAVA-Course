@@ -1,3 +1,4 @@
+01. 리스트 자료형
 #리스트 만들기
 odd = [1,3,5,7,9]
 
@@ -59,3 +60,71 @@ print(a[3:])
 # 중첩된 리스트에서 슬라이싱 하기
 a = [1, 2, ['0', '1', 'a', 'b', 'c'], 4, 5]
 # ['a', 'b', 'c']
+
+# 리스트 더하기
+a = [1, 2, 3]
+b = [4, 5, 6]
+print(a + b)
+
+# 리스트 반복(곱하기)
+c = a * 4
+print(c, len(c))
+
+# 리스트의 수정과 삭제
+a = [11, 22, 33]
+b = a
+a[2] = 777
+print(a) # 파일 원본이 바뀌었다.
+print(b)
+
+# del 요소삭제
+aa = [11,22,33,44,55]
+del aa[2]
+print(aa)
+
+# del 요소삭제2 (슬라이싱으로 삭제)
+aa = [11,22,33,44,55]
+del aa[1:3]
+print(aa)
+
+ss = ['나는', '오늘' ,'잠을', '잔다']
+print(ss)
+del ss[-1]
+print(ss)
+del ss[-1]
+print(ss)
+del ss[-1]
+print(ss)
+del ss[-1]
+print(ss)
+
+02.  리스트 관련함수
+# append - 추가하기
+a = []
+print(a)
+a.append(1)
+print(a)
+a.append(2)
+print(a)
+a.append([11,22,33])
+print(a)
+a.append(4)
+print(a)
+
+# sort - 리스트 정렬
+a = [5,43,5,6,56,3,2,4,1]
+b = ['gf', 'f', 'u', 'a', 'e', 'f', 'z', 'c']
+a.sort()
+a.sort()
+print(a)
+print(b)
+
+# sort - 리스트 뒤집기
+a = [5,43,5,6,56,3,2,4,1]
+b = ['gf', 'f', 'u', 'a', 'e', 'f', 'z', 'c']
+print(a[::-1])
+print(b[::-1])
+# a.reverse()
+# a.reverse()
+print(a)
+print(b)
