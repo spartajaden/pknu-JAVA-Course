@@ -169,3 +169,39 @@ a.find('k')
 a = "Life is too short"
 print(a.index('t'))
 # print(a.index('z')) 없으면 오류발생
+
+😊문자열 삽입하기
+# join - 문자열 삽입
+'abcdefg'
+
+# a-b-c-d-e-f-g
+print("a", "b", "c", sep="-")
+
+# 연습
+# a*b*c*d*e*f*g
+nn = '123456789'
+print("빠 ".join(nn) + "빠")
+
+# upper - 소문자를 대문자로 바꾸기
+a = 'Python is the best choice'
+print(a.upper())
+# lower - 대문자를 소문자로 바꾸기
+b = 'Python Is The best choice'
+print(a.lower())
+c = 'Python Is The best choice'
+print(c[0]+c[1:].lower())
+
+ss = f"{'hi':^12}"
+print(ss)
+# strip - 왼쪽공백지우기
+print(ss.lstrip())
+# rstrip - 오른쪽공백지우기
+print(ss.rstrip())
+# strip - 양쪽공백지우기 *
+print(ss.strip())
+
+# replace - 문자열 바꾸기 **
+a = "Life is long short"
+a.replace("too short","Egg")
+print(b)
+print(a)
