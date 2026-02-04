@@ -164,3 +164,8 @@ a.find('b')
 14
 a.find('k')
 -1
+
+# index - 위치 알려 주기2
+a = "Life is too short"
+print(a.index('t'))
+# print(a.index('z')) 없으면 오류발생
