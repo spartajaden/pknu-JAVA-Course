@@ -1,0 +1,161 @@
+Chapter 1. 비트코인 API
+# 비트코인 API
+import requests as req
+url = "https://api.bithumb.com/v1/candles/minutes/1?market=KRW-BTC&count=1"
+d_url = "https://api.bithumb.com/v1/candles/days?market=KRW-BTC&count=1"
+ori = req.get(url).json()[0]
+ori2 = req.get(d_url).json()[0]
+
+# '''분봉'''
+# 시작가
+openp = float(ori['opening_price'])
+# 최고가
+maxp = float(ori['high_price'])
+# 최소가
+minp = float(ori['low_price'])
+# 변화폭
+bandp = maxp - minp
+
+# '''일봉'''
+# 시작가
+openp2 = float(ori2['opening_price'])
+# 최고가
+maxp2 = float(ori2['high_price'])
+# 최소가
+minp2 = float(ori2['low_price'])
+# 변화폭
+bandp2 = maxp2 - minp2
+
+
+print("분기준 시작가:",openp,"\n최대가:",maxp,"\n최소가:",minp,"\n변화폭:",bandp)
+print("일기준 시작가:",openp2,"\n최대가:",maxp2,"\n최소가:",minp2,"\n변화폭:",bandp2)
+# print("검토:", openp + bandp)
+# print("최고가:", maxp)
+
+# 파이썬 외 언어, 삼항연산자 ((maxp - (openp + bandp)) > 0) ? "떡상중" : "떡락중")
+result = "떡상중" if ((maxp - (openp + bandp)) > 0) else "떡락중"
+result2 = "떡상중" if ((maxp2 - (openp2 + bandp2)) > 0) else "떡락중"
+print("분봉으로 판단:", result)
+print("일봉으로 판단:", result2)
+
+Chapter 2. 비트코인 원화
+# 비트코인 원화
+import requests
+import time
+
+# ──────────────── 설정 ────────────────
+USE_UPBIT_AS_PRIMARY = True       # True 추천 (한국 실시간 KRW 가격)
+FALLBACK_LAST_RATE = 1450.0       # 매우 오래된 경우 쓸 임의 환율 (2026년 초 평균 근처)
+
+last_usd_krw = None               # 글로벌 캐시
+
+def get_usd_krw():
+    """실패 시 None 반환"""
+    try:
+        # exchangerate.host (현재 제한적임 → 대안으로 바꾸는 게 좋음)
+        url = "https://api.exchangerate.host/latest?base=USD&symbols=KRW"
+        resp = requests.get(url, timeout=5)
+        data = resp.json()
+        if 'rates' in data and 'KRW' in data['rates']:
+            return float(data['rates']['KRW'])
+    except Exception as e:
+        print(f"환율 API 오류: {e}")
+    return None
+
+def safe_get_usd_krw():
+    """안전하게 환율 가져오기 + 캐싱"""
+    global last_usd_krw
+    
+    rate = get_usd_krw()
+    if rate is not None and rate > 500:   # 비현실적인 값 방지 (예: 0이나 999999)
+        last_usd_krw = rate
+        return rate
+    
+    # 실패 시 마지막 값 사용 (있으면)
+    if last_usd_krw is not None:
+        print("환율 API 실패 → 마지막 저장값 사용")
+        return last_usd_krw
+    
+    # 처음부터 실패하면 fallback
+    print("환율 정보 전혀 없음 → 임시값 사용")
+    return FALLBACK_LAST_RATE
+
+
+# ──────────────── Upbit 버전 (가장 추천) ────────────────
+def get_btc_krw_upbit():
+    try:
+        url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
+        resp = requests.get(url, timeout=5)
+        data = resp.json()
+        if resp.status_code == 200 and data:
+            return float(data[0]['trade_price'])
+    except Exception as e:
+        print(f"Upbit 오류: {e}")
+    return None
+
+
+# ──────────────── Binance + 환율 버전 (필요 시) ────────────────
+def get_btc_krw_binance():
+    try:
+        btc_usd = float(requests.get(
+            "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+            timeout=5
+        ).json()['price'])
+        
+        rate = safe_get_usd_krw()
+        return btc_usd * rate
+    except Exception as e:
+        print(f"Binance 오류: {e}")
+        return None
+
+
+# 테스트용 예시
+if __name__ == "__main__":
+    for _ in range(100):
+        if USE_UPBIT_AS_PRIMARY:
+            price = get_btc_krw_upbit()
+            source = "Upbit"
+        else:
+            price = get_btc_krw_binance()
+            source = "Binance + cached rate"
+        
+        if price:
+            print(f"[{source}] BTC/KRW : {int(price):,} 원")
+        else:
+            print("가격 조회 완전 실패")
+        
+        time.sleep(10)
+
+Chapter 3. 비트코인 미국달러 환산
+# 비트코인 미국달러 환산
+import requests
+import time
+
+# ──────────────── 설정 ────────────────
+def get_btc_usd():
+    """Binance에서 BTC/USD 실시간 가격 가져오기"""
+    try:
+        url = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
+        resp = requests.get(url, timeout=5)
+        data = resp.json()
+        return float(data['price'])
+    except Exception as e:
+        print(f"Binance API 오류: {e}")
+        return None
+
+# 테스트용 예시 (주피터나 .py에서 실행)
+if __name__ == "__main__":
+    print("BTC/USD 가격 감시 시작 (Binance 기준)")
+    print("가격은 약 10초마다 업데이트됩니다.\n")
+    
+    for i in range(100):
+        price = get_btc_usd()
+        
+        if price is not None:
+            # 소수점 2자리까지 표시 (실제 거래소처럼)
+            formatted = f"${price:,.2f}"
+            print(f"[{i+1:02d}] BTC/USD : {formatted}")
+        else:
+            print(f"[{i+1:02d}] 가격 조회 실패... 재시도 중")
+        
+        time.sleep(10)  # 10초 간격 (API 부하 줄이기)
