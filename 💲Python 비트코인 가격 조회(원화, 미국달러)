@@ -1,4 +1,4 @@
-Chapter 1. 비트코인 API
+Chapter 1. 비트코인 API 소스코드
 # 비트코인 API
 import requests as req
 url = "https://api.bithumb.com/v1/candles/minutes/1?market=KRW-BTC&count=1"
@@ -38,7 +38,7 @@ result2 = "떡상중" if ((maxp2 - (openp2 + bandp2)) > 0) else "떡락중"
 print("분봉으로 판단:", result)
 print("일봉으로 판단:", result2)
 
-Chapter 2. 비트코인 원화
+Chapter 2. 비트코인 원화 소스코드
 # 비트코인 원화
 import requests
 import time
@@ -126,7 +126,7 @@ if __name__ == "__main__":
         
         time.sleep(10)
 
-Chapter 3. 비트코인 미국달러 환산
+Chapter 3. 비트코인 미국달러 환산 소스코드
 # 비트코인 미국달러 환산
 import requests
 import time
