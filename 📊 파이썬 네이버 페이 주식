@@ -1,0 +1,40 @@
+import requests as req
+import matplotlib.pyplot as plt
+url = "https://finance.naver.com/sise/sise_market_sum.naver"
+ori = req.get(url).text
+
+code = ['005930','000270','005380','012450','068270']
+
+def finance(code = '005930'):
+    start_title = ori.find(f'<a href="/item/main.naver?code={code}" class="tltle">')
+    ori1 = ori[start_title : start_title + 70].replace(f'<a href="/item/main.naver?code={code}" class="tltle">','').replace('</a></td>','').replace('</a></td','').replace('\n','').strip()
+    ori2 = ori[start_title + 70 : start_title + 105].replace('<td class="number">','').replace('</td>','').replace('>','').strip()
+    print("종목:",ori1)
+    print("가격:",ori2)
+	
+for x in code:
+    finance(x)
+	
+color = ["skyblue", "orange", "skyblue", "orange", "skyblue"]
+ori2 = []
+values = []
+
+if not values:
+    print("\n그래프를 그릴 데이터가 없습니다. (파싱 실패)")
+else:
+    plt.figure(figsize=(9, 5.5))
+    
+    # x축을 종목명으로 (원본 코드의 x는 code 리스트라서 종목 코드만 나옴 → 보기 안 좋음)
+    plt.bar(ori1 if ori1 else code, values, color=color[:len(values)])
+    
+    # 막대 위에 가격 표시 (옵션)
+    for ori1, ori2 in enumerate(values):
+        plt.text(ori1, ori2 + max(values)*0.008 if values else 0,
+                 f'{ori2:,}', ha='center', va='bottom', fontsize=10)
+        
+plt.bar(x, ori2, values, color=color)
+plt.title("주요 종목 현재가")
+plt.xlabel("종목코드")
+plt.ylabel("가격 (원)")
+plt.grid(axis='y', alpha=0.3)
+plt.show(block=True)
