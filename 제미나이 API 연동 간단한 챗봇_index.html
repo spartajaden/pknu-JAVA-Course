@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>간단한 챗봇</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 500px;
+      height: 600px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .chat-header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .chat-header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f8f9fa;
+    }
+
+    .message {
+      margin-bottom: 15px;
+      display: flex;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.user {
+      justify-content: flex-end;
+    }
+
+    .message.bot {
+      justify-content: flex-start;
+    }
+
+    .message-content {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      word-wrap: break-word;
+      line-height: 1.4;
+    }
+
+    .message.user .message-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.bot .message-content {
+      background: white;
+      color: #333;
+      border: 1px solid #e0e0e0;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-input-area {
+      padding: 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 25px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    #user-input:focus {
+      border-color: #667eea;
+    }
+
+    #send-button {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    #send-button:active {
+      transform: translateY(0);
+    }
+
+    .typing-indicator {
+      display: inline-flex;
+      gap: 4px;
+      padding: 8px 12px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #999;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+      30% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+    }
+
+    .quick-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 20px;
+      background: white;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .quick-button {
+      padding: 8px 16px;
+      background: #f0f0f0;
+      border: 1px solid #e0e0e0;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+
+    .quick-button:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    #send-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #user-input:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <h1>🤖 간단한 챗봇</h1>
+      <p>안녕하세요! 무엇을 도와드릴까요?</p>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="message bot">
+        <div class="message-content">
+          안녕하세요! 챗봇입니다. 무엇을 도와드릴까요? 😊
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-buttons">
+      <button class="quick-button" onclick="sendQuickMessage('안녕')">안녕</button>
+      <button class="quick-button" onclick="sendQuickMessage('이름이 뭐야?')">이름이 뭐야?</button>
+      <button class="quick-button" onclick="sendQuickMessage('도와줘')">도와줘</button>
+      <button class="quick-button" onclick="sendQuickMessage('고마워')">고마워</button>
+      <button class="quick-button" onclick="sendQuickMessage('잘가')">잘가</button>
+    </div>
+
+    <div class="chat-input-area">
+      <input 
+        type="text" 
+        id="user-input" 
+        placeholder="메시지를 입력하세요..."
+        onkeypress="handleKeyPress(event)"
+      >
+      <button id="send-button" onclick="sendMessage()">전송</button>
+    </div>
+  </div>
+
+  <script>
+    // 챗봇 응답 규칙 정의
+    const botResponses = {
+      // 인사 관련
+      '안녕': '반갑습니다! 😊',
+      '안녕하세요': '안녕하세요! 무엇을 도와드릴까요?',
+      '하이': '하이! 반가워요! 👋',
+      '헬로': '헬로! 안녕하세요!',
+      '굿모닝': '좋은 아침이에요! ☀️',
+      '굿나잇': '좋은 밤 되세요! 🌙',
+      '잘가': '안녕히 가세요! 또 만나요! 👋',
+      '잘자': '안녕히 주무세요! 좋은 꿈 꾸세요!',
+      '또봐': '네, 또 만나요! 😊',
+      
+      // 이름 관련
+      '이름이 뭐야': '저는 챗봇이에요! 이름은 아직 없네요. 😅',
+      '이름이 뭐야?': '저는 챗봇이에요! 이름은 아직 없네요. 😅',
+      '너 이름': '저는 챗봇이에요!',
+      '너 누구': '저는 여러분을 도와주는 챗봇이에요!',
+      
+      // 감사 관련
+      '고마워': '천만에요! 도움이 되어서 기쁩니다! 😊',
+      '고마워요': '천만에요! 언제든지 물어보세요!',
+      '감사합니다': '별말씀을요! 도움이 필요하시면 언제든지 말씀해주세요!',
+      '감사': '천만에요! 😊',
+      '땡큐': 'You\'re welcome! 😊',
+      
+      // 도움 관련
+      '도와줘': '무엇을 도와드릴까요? 말씀해주세요!',
+      '도와주세요': '네, 무엇을 도와드릴까요?',
+      '도움': '무엇이 필요하신가요?',
+      'help': '무엇을 도와드릴까요?',
+      '헬프': '무엇을 도와드릴까요?',
+      
+      // 기타
+      '뭐해': '지금 여러분과 대화하고 있어요! 😊',
+      '뭐하니': '지금 여러분과 대화하고 있어요!',
+      '좋아': '좋아요! 기쁩니다! 😊',
+      '좋아요': '좋아요! 기쁩니다!',
+      '싫어': '아, 그렇군요. 다른 도움이 필요하시면 말씀해주세요.',
+      '괜찮아': '네, 알겠습니다!',
+      '알겠어': '네, 이해했습니다!',
+      '알겠습니다': '네, 이해했습니다!',
+      
+      // 날씨 관련
+      '날씨': '죄송해요, 날씨 정보는 제공하지 못해요. 날씨 앱을 확인해보세요!',
+      '날씨 어때': '죄송해요, 날씨 정보는 제공하지 못해요.',
+      
+      // 시간 관련
+      '몇 시야': '죄송해요, 시간 정보는 제공하지 못해요. 시계를 확인해보세요!',
+      '지금 몇 시': '죄송해요, 시간 정보는 제공하지 못해요.',
+    };
+
+    // 메시지 전송 함수
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      
+      if (!message) return;
+      
+      // 사용자 메시지 표시
+      addMessage(message, 'user');
+      input.value = '';
+      
+      // 입력 비활성화
+      input.disabled = true;
+      document.getElementById('send-button').disabled = true;
+      
+      // 타이핑 인디케이터 표시
+      const typingId = showTypingIndicator();
+      
+      try {
+        // 먼저 기존 응답 확인
+        const localResponse = getBotResponse(message);
+        
+        // 기존 응답이 기본 응답인지 확인 (기본 응답이면 Gemini 호출)
+        const isDefaultResponse = checkIfDefaultResponse(localResponse, message);
+        
+        if (isDefaultResponse) {
+          // 기존 응답이 없으면 Gemini API 호출
+          removeTypingIndicator(typingId);
+          const geminiTypingId = showTypingIndicator();
+          
+          try {
+            const response = await fetch('/api/chat/gemini', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ message: message })
+            });
+            
+            removeTypingIndicator(geminiTypingId);
+            
+            if (response.ok) {
+              const data = await response.json();
+              addMessage(data.response, 'bot');
+            } else {
+              const errorData = await response.json();
+              addMessage('죄송합니다. AI 응답을 가져오는 중 오류가 발생했습니다: ' + (errorData.error || '알 수 없는 오류'), 'bot');
+            }
+          } catch (error) {
+            removeTypingIndicator(geminiTypingId);
+            addMessage('죄송합니다. 서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.', 'bot');
+          }
+        } else {
+          // 기존 응답이 있으면 그대로 사용
+          removeTypingIndicator(typingId);
+          setTimeout(() => {
+            addMessage(localResponse, 'bot');
+          }, 500);
+        }
+      } catch (error) {
+        removeTypingIndicator(typingId);
+        addMessage('오류가 발생했습니다: ' + error.message, 'bot');
+      } finally {
+        // 입력 다시 활성화
+        input.disabled = false;
+        document.getElementById('send-button').disabled = false;
+        input.focus();
+      }
+    }
+
+    // 빠른 메시지 전송
+    function sendQuickMessage(message) {
+      document.getElementById('user-input').value = message;
+      sendMessage();
+    }
+
+    // Enter 키 처리
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    // 기본 응답 목록
+    const defaultResponses = [
+      '죄송해요, 잘 이해하지 못했어요. 다시 말씀해주시겠어요?',
+      '무엇을 말씀하시는 건지 잘 모르겠어요. 다른 표현으로 말씀해주세요.',
+      '이해하지 못했어요. 위의 빠른 버튼을 사용해보시겠어요?',
+      '죄송합니다. 더 명확하게 말씀해주시겠어요?'
+    ];
+
+    // 챗봇 응답 생성 (기존 규칙 기반)
+    function getBotResponse(userMessage) {
+      const message = userMessage.toLowerCase().trim();
+      
+      // 정확한 키워드 매칭
+      if (botResponses[message]) {
+        return botResponses[message];
+      }
+      
+      // 부분 매칭 (키워드가 포함된 경우)
+      for (const [keyword, response] of Object.entries(botResponses)) {
+        if (message.includes(keyword)) {
+          return response;
+        }
+      }
+      
+      // 기본 응답 반환 (이 경우 Gemini가 호출됨)
+      return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    }
+
+    // 기본 응답인지 확인하는 함수
+    function checkIfDefaultResponse(response, originalMessage) {
+      // 기본 응답 목록에 포함되어 있으면 true
+      return defaultResponses.includes(response);
+    }
+
+    // 타이핑 인디케이터 표시
+    function showTypingIndicator() {
+      const messagesContainer = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message bot';
+      const typingId = 'typing-' + Date.now();
+      messageDiv.id = typingId;
+      
+      messageDiv.innerHTML = `
+        <div class="message-content">
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      `;
+      
+      messagesContainer.appendChild(messageDiv);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      return typingId;
+    }
+
+    // 타이핑 인디케이터 제거
+    function removeTypingIndicator(id) {
+      const indicator = document.getElementById(id);
+      if (indicator) {
+        indicator.remove();
+      }
+    }
+
+    // 메시지 추가 함수
+    function addMessage(text, type) {
+      const messagesContainer = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${type}`;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'message-content';
+      contentDiv.textContent = text;
+      
+      messageDiv.appendChild(contentDiv);
+      messagesContainer.appendChild(messageDiv);
+      
+      // 스크롤을 맨 아래로
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // 페이지 로드 시 입력창에 포커스
+    window.addEventListener('load', () => {
+      document.getElementById('user-input').focus();
+    });
+  </script>
+</body>
+</html>

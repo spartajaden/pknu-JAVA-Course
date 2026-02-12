@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>반갑습니다.</title>
+		<style>
+			h3 {
+				color: blue
+			}
+		
+		</style>	
+    </head>
+    <body>
+		<h1>안녕하세요.❤️👍</h1>
+ 		<h2>반가워요.👍</h2>
+		<h3>고맙습니다.👌</h3>
+ 		<h4 style="color :red">어서오세요.🙌</h4>
+		<h5 style="background-color: greenyellow">기부니가좋아요.🤷‍♂️</h5>
+ 		<h6>배고파요😒</h6>
+		<mark>이것은 일반 글자.</mark> <br>
+		<a href="https://www.naver.com/">다음가기</a>
+		<hr>
+		<ol>
+			<li>일어나기</li>
+			<li>씻기</li>
+			<li>밥먹기</li>
+			<li>출근하기</li>
+		</ol>
+   </body>
+</html>
