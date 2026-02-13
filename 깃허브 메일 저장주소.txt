@@ -1,0 +1,6 @@
+git config --global user.email "jaden758@naver.com"
+  git config --global user.name "spartajaden"
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILO4qxSsVf3x8KYyV1FHawPebSSBi+u7RpswqMiNCDFw cjh@DESKTOP-8EI80N4 -> 깃허브 SSH키
+
+- Enter passphrase for key '/home/cjh/.ssh/id_ed25519': 비밀번호 : 1234
